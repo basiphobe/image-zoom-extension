@@ -130,6 +130,9 @@ Free to use and modify as needed.
 **Issue:** Image keeps moving after right-clicking or when a dialog appears
 - This has been fixed in the latest version - drag state is properly reset on context menu and focus loss
 
+**Issue:** Image position changes after double-click reset
+- This has been fixed - images now return to their exact original position and state when reset
+
 **Issue:** Images move around when zooming
 - This is expected behavior; the image scales from its center
 - Use the click-and-drag panning feature to reposition the zoomed area

@@ -49,27 +49,29 @@
     if (panX !== undefined) state.panX = panX;
     if (panY !== undefined) state.panY = panY;
     
-    // Preserve any existing transforms and add our scale and translate
-    const baseTransform = state.originalTransform;
-    const scaleTransform = `scale(${state.scale})`;
-    const translateTransform = `translate(${state.panX}px, ${state.panY}px)`;
-    
-    if (baseTransform && !baseTransform.includes('scale') && !baseTransform.includes('translate')) {
-      img.style.transform = `${baseTransform} ${translateTransform} ${scaleTransform}`;
-    } else {
-      img.style.transform = `${translateTransform} ${scaleTransform}`;
-    }
-
     // Add class for styling
     if (scale !== 1.0) {
       img.classList.add('image-zoom-active');
       state.isZooming = true;
+      
+      // Apply transform for zoomed state
+      const baseTransform = state.originalTransform;
+      const scaleTransform = `scale(${state.scale})`;
+      const translateTransform = `translate(${state.panX}px, ${state.panY}px)`;
+      
+      if (baseTransform && !baseTransform.includes('scale') && !baseTransform.includes('translate')) {
+        img.style.transform = `${baseTransform} ${translateTransform} ${scaleTransform}`;
+      } else {
+        img.style.transform = `${translateTransform} ${scaleTransform}`;
+      }
     } else {
       img.classList.remove('image-zoom-active');
       state.isZooming = false;
       // Reset pan when zoom is reset
       state.panX = 0;
       state.panY = 0;
+      // Restore original transform
+      img.style.transform = state.originalTransform;
     }
   }
 
