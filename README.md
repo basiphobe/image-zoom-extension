@@ -9,6 +9,7 @@ A simple, modern browser extension that allows you to zoom in and out on any ima
 - 🖱️ Click and drag to pan around zoomed images
 - 🎯 Smooth zoom transitions
 - 🔄 Double-click to reset zoom
+- ✨ Enhanced image quality with dynamic rendering and sharpening
 - 🌐 Works on Firefox and Edge (Chromium-based browsers)
 - ⚡ Lightweight and fast
 
@@ -85,6 +86,11 @@ image-zoom-extension/
 - **Manifest Version:** 3 (latest standard)
 - **Permissions:** None required (runs on all URLs via content scripts)
 - **Browser Support:** Firefox 109+, Edge, Chrome, and other Chromium-based browsers
+- **Image Quality Enhancements:**
+  - High-quality bicubic interpolation for smooth scaling
+  - Dynamic rendering mode based on zoom level
+  - Subtle contrast and saturation boost for improved perceived sharpness
+  - Hardware-accelerated rendering for smooth performance
 
 ## Publishing to Stores
 

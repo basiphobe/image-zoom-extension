@@ -9,11 +9,23 @@ img.image-zoom-active {
   z-index: 9999;
   
   /* Improve image quality when scaled up */
+  /* Use high-quality scaling algorithm - smoother for photos */
   image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+  image-rendering: high-quality;
   
-  /* Add subtle shadow for depth */
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  /* Enhanced sharpening and contrast for better perceived quality */
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) 
+          contrast(1.05) 
+          saturate(1.05);
+  
+  /* Force hardware acceleration for smoother rendering */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-font-smoothing: subpixel-antialiased;
+  
+  /* Use bicubic interpolation when available */
+  -ms-interpolation-mode: bicubic;
   
   /* Prevent text selection while zooming */
   user-select: none;

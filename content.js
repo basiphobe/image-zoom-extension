@@ -64,14 +64,26 @@
       } else {
         img.style.transform = `${translateTransform} ${scaleTransform}`;
       }
+      
+      // Adjust image rendering based on zoom level
+      // For photos at moderate zoom: use smooth/high-quality
+      // For high zoom on pixel art or screenshots: use crisp-edges
+      if (scale > 2.5) {
+        // Higher zoom - try to preserve pixels
+        img.style.imageRendering = 'auto';
+      } else {
+        // Moderate zoom - smooth scaling works better
+        img.style.imageRendering = 'high-quality';
+      }
     } else {
       img.classList.remove('image-zoom-active');
       state.isZooming = false;
       // Reset pan when zoom is reset
       state.panX = 0;
       state.panY = 0;
-      // Restore original transform
+      // Restore original transform and rendering
       img.style.transform = state.originalTransform;
+      img.style.imageRendering = '';
     }
   }
 
