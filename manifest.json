@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Image Zoom",
+  "version": "1.0.0",
+  "description": "Zoom in/out on any image by holding Ctrl and scrolling the mouse wheel",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "permissions": [],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "image-zoom@example.com",
+      "strict_min_version": "109.0"
+    }
+  }
+}
