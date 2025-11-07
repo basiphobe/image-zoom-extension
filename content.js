@@ -131,9 +131,13 @@
 
   // Double-click to reset zoom
   function handleDoubleClick(e) {
-    if (e.target.tagName === 'IMG' && e.ctrlKey) {
+    if (e.target.tagName !== 'IMG') return;
+    
+    const state = imageZoomState.get(e.target);
+    
+    // Only reset if image is currently zoomed
+    if (state && state.scale !== 1.0) {
       e.preventDefault();
-      initImageZoom(e.target);
       applyZoom(e.target, 1.0);
     }
   }
