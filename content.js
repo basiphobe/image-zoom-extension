@@ -196,6 +196,30 @@
     dragState.currentImage = null;
   }
 
+  // Handle context menu to stop dragging
+  function handleContextMenu(e) {
+    if (dragState.isDragging && dragState.currentImage) {
+      // Restore cursor and transition
+      dragState.currentImage.style.cursor = 'grab';
+      dragState.currentImage.style.transition = '';
+      
+      dragState.isDragging = false;
+      dragState.currentImage = null;
+    }
+  }
+
+  // Handle mouse leave from document to stop dragging
+  function handleDocumentMouseLeave(e) {
+    if (dragState.isDragging && dragState.currentImage) {
+      // Restore cursor and transition
+      dragState.currentImage.style.cursor = 'grab';
+      dragState.currentImage.style.transition = '';
+      
+      dragState.isDragging = false;
+      dragState.currentImage = null;
+    }
+  }
+
   // Set up event listeners
   document.addEventListener('wheel', handleWheel, { passive: false });
   document.addEventListener('keyup', handleKeyUp);
@@ -203,6 +227,8 @@
   document.addEventListener('mousedown', handleMouseDown);
   document.addEventListener('mousemove', handleMouseMove);
   document.addEventListener('mouseup', handleMouseUp);
+  document.addEventListener('contextmenu', handleContextMenu);
+  document.addEventListener('mouseleave', handleDocumentMouseLeave);
   
   // Optional: uncomment to enable mouse leave reset
   // document.addEventListener('mouseleave', handleMouseLeave, true);
