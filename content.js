@@ -112,8 +112,27 @@
     // Clamp to min/max
     newScale = Math.max(CONFIG.minScale, Math.min(CONFIG.maxScale, newScale));
 
-    // Apply the zoom
-    applyZoom(target, newScale);
+    // Calculate zoom point relative to image
+    const rect = target.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    // Calculate the point in the image coordinates (accounting for current transform)
+    const imgCenterX = rect.width / 2;
+    const imgCenterY = rect.height / 2;
+    
+    // Distance from center to mouse
+    const offsetX = mouseX - imgCenterX;
+    const offsetY = mouseY - imgCenterY;
+    
+    // Adjust pan to keep the mouse position fixed during zoom
+    // Calculate how much the image point moves due to scale change
+    const scaleFactor = newScale / state.scale;
+    const newPanX = state.panX - offsetX * (scaleFactor - 1);
+    const newPanY = state.panY - offsetY * (scaleFactor - 1);
+
+    // Apply the zoom with adjusted pan
+    applyZoom(target, newScale, newPanX, newPanY);
   }
 
   // Reset zoom when Ctrl is released while hovering

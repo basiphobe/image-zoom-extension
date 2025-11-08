@@ -6,6 +6,7 @@ A simple, modern browser extension that allows you to zoom in and out on any ima
 
 - 🔍 Zoom any image on any webpage
 - ⌨️ Simple controls: Hold **Ctrl** + **Mouse Wheel** to zoom
+- 🎯 Intelligent zoom centered on mouse cursor position
 - 🖱️ Click and drag to pan around zoomed images
 - 🎯 Smooth zoom transitions
 - 🔄 Double-click to reset zoom
@@ -49,8 +50,8 @@ A simple, modern browser extension that allows you to zoom in and out on any ima
 2. Hover your mouse over an image
 3. Hold down the **Ctrl** key
 4. Scroll your mouse wheel:
-   - **Scroll up** = Zoom in
-   - **Scroll down** = Zoom out
+   - **Scroll up** = Zoom in (centered on cursor position)
+   - **Scroll down** = Zoom out (centered on cursor position)
 5. Once zoomed in, **click and drag** the image to pan around
 6. **Double-click** on a zoomed image to reset it to original size
 
