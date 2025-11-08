@@ -76,17 +76,22 @@ image-zoom-extension/
 ├── content.js             # Main zoom functionality
 ├── styles.css             # Styling for zoomed images
 ├── LICENSE                # MIT License
-├── PRIVACY.md             # Privacy policy for stores
-├── STORE_LISTING.md       # Copy for store descriptions
-├── SCREENSHOTS.md         # Guide for creating store screenshots
+├── PRIVACY.md             # Privacy policy
 ├── build.fish             # Build script for distribution packages
 ├── .gitignore             # Git ignore rules
 ├── icons/                 # Extension icons
 │   ├── icon16.png
+│   ├── icon16.svg
 │   ├── icon48.png
-│   └── icon128.png
-├── dist/                  # Distribution packages (generated)
-│   └── image-zoom-v1.0.0.zip
+│   ├── icon48.svg
+│   ├── icon128.png
+│   └── icon128.svg
+├── screenshots/           # Store listing screenshots
+│   ├── full_page.png
+│   ├── normal.png
+│   ├── zoom_in.png
+│   ├── zoom_out.png
+│   └── zoom_pan.png
 └── README.md              # This file
 ```
 
@@ -101,128 +106,15 @@ image-zoom-extension/
   - Subtle contrast and saturation boost for improved perceived sharpness
   - Hardware-accelerated rendering for smooth performance
 
-## Publishing to Stores
+## Building
 
-### Quick Start
+To create a distribution package:
 
-1. **Build the distribution package:**
-   ```bash
-   ./build.fish
-   ```
-   This creates `dist/image-zoom-v1.0.0.zip` ready for upload.
+```bash
+./build.fish
+```
 
-2. **Take screenshots** (see `SCREENSHOTS.md` for guidance)
-
-3. **Submit to stores** (details below)
-
----
-
-### Firefox Add-ons (AMO) - Recommended First
-
-**Cost:** FREE ✨
-
-**Steps:**
-1. **Create account** at https://addons.mozilla.org/developers/
-2. **Submit extension:**
-   - Go to https://addons.mozilla.org/developers/addon/submit/
-   - Upload `dist/image-zoom-v1.0.0.zip`
-   - Choose "On this site" for distribution
-3. **Fill out listing:**
-   - Use content from `STORE_LISTING.md`
-   - Upload screenshots
-   - Set category: "Photos, Music & Videos"
-   - Privacy policy: Use `PRIVACY.md` or link to GitHub
-4. **Review time:** 1-7 days typically
-5. **No fees!**
-
-**Tips:**
-- Firefox reviewers check code carefully
-- Make sure PRIVACY.md accurately reflects no data collection
-- Respond to reviewer questions promptly
-
----
-
-### Chrome Web Store - Reaches Most Users
-
-**Cost:** $5 one-time developer fee
-
-**Steps:**
-1. **Register as developer:**
-   - Go to https://chrome.google.com/webstore/devconsole/register
-   - Pay $5 registration fee
-   - Verify email
-2. **Upload extension:**
-   - Navigate to Developer Dashboard
-   - Click "New Item"
-   - Upload `dist/image-zoom-v1.0.0.zip`
-3. **Complete store listing:**
-   - Copy description from `STORE_LISTING.md`
-   - Upload screenshots (1280x800 or 640x400)
-   - Add promotional images (optional but recommended)
-   - Category: "Productivity" or "Photos"
-   - Privacy: Link to GitHub PRIVACY.md
-4. **Submit for review**
-5. **Review time:** 1-3 days usually
-
-**Benefits:**
-- Works on Chrome, Edge, Brave, Opera, Vivaldi
-- Largest user base
-- Automatic updates
-
----
-
-### Microsoft Edge Add-ons - Optional
-
-**Cost:** FREE (but Chrome listing works on Edge too)
-
-**When to use:** Only if you want Edge-specific presence
-
-**Steps:**
-1. Register at https://partner.microsoft.com/dashboard/microsoftedge/
-2. Similar process to Chrome
-3. Note: Most Edge users can install from Chrome Web Store
-
-**Recommendation:** Skip this unless you need Edge-specific features
-
----
-
-### Pre-Submission Checklist
-
-Before submitting to any store:
-
-- [x] Version number set in `manifest.json` (currently 1.0.0)
-- [x] Extension ID updated for Firefox in `manifest.json`
-- [x] LICENSE file included
-- [x] PRIVACY.md created and accurate
-- [ ] Screenshots created (see `SCREENSHOTS.md`)
-- [x] Store listing copy prepared (see `STORE_LISTING.md`)
-- [x] Distribution package built (`./build.fish`)
-- [ ] Tested extension in target browser
-- [ ] Support email/contact ready
-
----
-
-### Post-Publication
-
-After your extension is approved:
-
-1. **Update README.md** with store links
-2. **Add badges** to show installation links
-3. **Monitor reviews** and respond to user feedback
-4. **Plan updates** - increment version in manifest.json
-
----
-
-### Version Updates
-
-When releasing updates:
-
-1. Update version in `manifest.json`
-2. Run `./build.fish` to create new package
-3. Upload to stores with changelog
-4. Tag release in Git: `git tag v1.0.1`
-
----
+This creates `dist/image-zoom-v1.0.0.zip` ready for installation or submission to browser extension stores.
 
 ## Privacy
 
