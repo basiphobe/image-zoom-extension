@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Image Zoom",
   "version": "1.0.0",
-  "description": "Zoom in/out on any image by holding Ctrl and scrolling the mouse wheel",
+  "description": "Zoom and pan images with mouse-centered controls. Hold Ctrl + scroll to zoom, click and drag to pan, double-click to reset.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -19,7 +19,7 @@
   "permissions": [],
   "browser_specific_settings": {
     "gecko": {
-      "id": "image-zoom@example.com",
+      "id": "image-zoom@basiphobe.github.io",
       "strict_min_version": "109.0"
     }
   }
