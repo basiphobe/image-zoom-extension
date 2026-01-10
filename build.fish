@@ -13,18 +13,22 @@ rm -f dist/image-zoom-*.zip
 echo "📦 Creating distribution package..."
 
 # Create the ZIP file with only the necessary files
-zip -r dist/image-zoom-v1.0.0.zip \
+zip -r dist/image-zoom-v1.1.0.zip \
     manifest.json \
+    defaults.js \
     content.js \
     styles.css \
+    options.html \
+    options.js \
+    options.css \
     icons/ \
     LICENSE \
     -x "*.DS_Store" "*.git*" "*README.md" "*PRIVACY.md" "*STORE_LISTING.md" "*SCREENSHOTS.md"
 
-echo "✅ Package created: dist/image-zoom-v1.0.0.zip"
+echo "✅ Package created: dist/image-zoom-v1.1.0.zip"
 echo ""
 echo "📊 Package contents:"
-unzip -l dist/image-zoom-v1.0.0.zip
+unzip -l dist/image-zoom-v1.1.0.zip
 echo ""
 echo "✨ Build complete! Your extension is ready for submission."
 echo ""
