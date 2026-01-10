@@ -23,7 +23,7 @@ zip -r dist/image-zoom-v1.1.0.zip \
     options.css \
     icons/ \
     LICENSE \
-    -x "*.DS_Store" "*.git*" "*README.md" "*PRIVACY.md" "*STORE_LISTING.md" "*SCREENSHOTS.md"
+    -x "*.DS_Store" "*.git*" "*README.md" "*PRIVACY.md" "*STORE_LISTING.md" "*SCREENSHOTS.md" "*full_icon.png"
 
 echo "✅ Package created: dist/image-zoom-v1.1.0.zip"
 echo ""
