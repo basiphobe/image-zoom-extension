@@ -17,13 +17,114 @@
     initialPanY: 0
   };
   
-  // Configuration
-  const CONFIG = {
-    zoomStep: 0.1,        // 10% zoom per scroll tick
-    minScale: 0.5,        // Minimum 50% of original size
-    maxScale: 5.0,        // Maximum 500% of original size
-    transitionDuration: 100  // Smooth transition in ms
-  };
+  // Configuration - will be loaded from storage
+  let CONFIG = { ...DEFAULT_SETTINGS };
+  
+  // Track if double-click zoom mode is active for an image
+  const doubleClickZoomState = new WeakMap();
+  
+  // Load settings from storage
+  async function loadSettings() {
+    try {
+      const result = await browser.storage.sync.get('settings');
+      if (result.settings) {
+        CONFIG = { ...DEFAULT_SETTINGS, ...result.settings };
+      }
+      updateStyleSheet();
+    } catch (error) {
+      console.error('Error loading settings:', error);
+      // Ensure stylesheet is created even on error
+      updateStyleSheet();
+    }
+  }
+  
+  // Listen for settings changes
+  browser.storage.onChanged.addListener((changes, area) => {
+    if (area === 'sync' && changes.settings) {
+      CONFIG = { ...DEFAULT_SETTINGS, ...changes.settings.newValue };
+      updateStyleSheet();
+      
+      // Update marching ants on currently zoomed images
+      document.querySelectorAll('img.image-zoom-active').forEach(img => {
+        if (CONFIG.enableMarchingAnts) {
+          img.classList.add('image-zoom-mode-active');
+        } else {
+          img.classList.remove('image-zoom-mode-active');
+        }
+      });
+    }
+  });
+  
+  // Update dynamic styles based on settings
+  function updateStyleSheet() {
+    let styleElement = document.getElementById('image-zoom-dynamic-styles');
+    if (!styleElement) {
+      styleElement = document.createElement('style');
+      styleElement.id = 'image-zoom-dynamic-styles';
+      document.head.appendChild(styleElement);
+    }
+    
+    const filters = [];
+    if (CONFIG.enableDropShadow) {
+      filters.push('drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))');
+    }
+    if (CONFIG.enableContrastBoost) {
+      filters.push('contrast(1.05)');
+    }
+    if (CONFIG.enableSaturationBoost) {
+      filters.push('saturate(1.05)');
+    }
+    
+    const filterCSS = filters.length > 0 ? filters.join(' ') : 'none';
+    const outlineCSS = CONFIG.enableHoverOutline 
+      ? 'outline: 2px solid rgba(59, 130, 246, 0.5); outline-offset: 2px;'
+      : '';
+    
+    // Marching ants animation
+    const marchingAntsCSS = CONFIG.enableMarchingAnts ? `
+      @keyframes marching-ants {
+        0% {
+          outline-offset: -2px;
+        }
+        100% {
+          outline-offset: -4px;
+        }
+      }
+      
+      @keyframes blink-border {
+        0%, 100% {
+          outline-width: 0px;
+        }
+        50% {
+          outline-width: ${CONFIG.marchingAntsWidth}px;
+        }
+      }
+      
+      img.image-zoom-mode-active {
+        outline: ${CONFIG.marchingAntsWidth}px ${CONFIG.marchingAntsStyle} ${CONFIG.marchingAntsColor} !important;
+        outline-offset: -${CONFIG.marchingAntsWidth}px !important;
+        animation: marching-ants 0.3s linear infinite alternate !important;
+      }
+      
+      img.image-zoom-blink {
+        outline-style: ${CONFIG.marchingAntsStyle} !important;
+        outline-color: ${CONFIG.marchingAntsColor} !important;
+        outline-offset: -${CONFIG.marchingAntsWidth}px !important;
+        animation: blink-border 0.25s ease-in-out 3 !important;
+      }
+    ` : '';
+    
+    styleElement.textContent = `
+      img.image-zoom-active {
+        transition: transform ${CONFIG.transitionDuration}ms ease-out !important;
+        filter: ${filterCSS} !important;
+      }
+      img.image-zoom-active:hover {
+        ${outlineCSS}
+      }
+      ${marchingAntsCSS}
+    `;
+  }
 
   // Initialize zoom state for an image
   function initImageZoom(img) {
@@ -52,6 +153,12 @@
     // Add class for styling
     if (scale !== 1.0) {
       img.classList.add('image-zoom-active');
+      
+      // Add marching ants if enabled
+      if (CONFIG.enableMarchingAnts) {
+        img.classList.add('image-zoom-mode-active');
+      }
+      
       state.isZooming = true;
       
       // Apply transform for zoomed state
@@ -76,8 +183,21 @@
         img.style.imageRendering = 'high-quality';
       }
     } else {
+      // Check if we're returning to original scale from a zoomed state BEFORE removing classes
+      const wasZoomed = img.classList.contains('image-zoom-mode-active');
+      
       img.classList.remove('image-zoom-active');
+      img.classList.remove('image-zoom-mode-active');
       state.isZooming = false;
+      
+      // If marching ants was enabled and image was zoomed, blink to indicate return to original
+      if (CONFIG.enableMarchingAnts && CONFIG.enableBlinkAtOriginal && wasZoomed) {
+        img.classList.add('image-zoom-blink');
+        setTimeout(() => {
+          img.classList.remove('image-zoom-blink');
+        }, 900); // 3 blinks at 300ms each
+      }
+      
       // Reset pan when zoom is reset
       state.panX = 0;
       state.panY = 0;
@@ -89,13 +209,24 @@
 
   // Handle wheel event on images
   function handleWheel(e) {
-    // Only proceed if Ctrl is held
-    if (!e.ctrlKey) return;
-
     const target = e.target;
     
     // Check if target is an image
     if (target.tagName !== 'IMG') return;
+    
+    // Check if double-click zoom mode is active for this image
+    const doubleClickMode = doubleClickZoomState.get(target);
+    const isDoubleClickZoomActive = CONFIG.enableDoubleClickZoom && doubleClickMode && doubleClickMode.active;
+    
+    // Check if the configured activation key is held
+    const activationKeyPressed = 
+      (CONFIG.activationKey === 'Control' && e.ctrlKey) ||
+      (CONFIG.activationKey === 'Alt' && e.altKey) ||
+      (CONFIG.activationKey === 'Shift' && e.shiftKey) ||
+      (CONFIG.activationKey === 'Meta' && e.metaKey);
+    
+    // Only proceed if activation key is held OR double-click zoom mode is active
+    if (!activationKeyPressed && !isDoubleClickZoomActive) return;
 
     // Prevent default zoom behavior
     e.preventDefault();
@@ -162,21 +293,46 @@
     }
   }
 
-  // Double-click to reset zoom
+  // Double-click to reset zoom OR activate zoom mode
   function handleDoubleClick(e) {
     if (e.target.tagName !== 'IMG') return;
     
     const state = imageZoomState.get(e.target);
     
-    // Only reset if image is currently zoomed
-    if (state && state.scale !== 1.0) {
+    // If double-click to zoom is enabled and image is not currently zoomed
+    if (CONFIG.enableDoubleClickZoom && (!state || state.scale === 1.0)) {
+      e.preventDefault();
+      initImageZoom(e.target);
+      const zoomState = doubleClickZoomState.get(e.target) || { active: false };
+      zoomState.active = true;
+      doubleClickZoomState.set(e.target, zoomState);
+      
+      // Add marching ants immediately to show zoom mode is active
+      if (CONFIG.enableMarchingAnts) {
+        e.target.classList.add('image-zoom-mode-active');
+      }
+      
+      return;
+    }
+    
+    // Reset if image is currently zoomed (and reset is enabled)
+    if (CONFIG.enableDoubleClickReset && state && state.scale !== 1.0) {
       e.preventDefault();
       applyZoom(e.target, 1.0);
+      
+      // Deactivate double-click zoom mode if it was active
+      if (CONFIG.enableDoubleClickZoom) {
+        doubleClickZoomState.set(e.target, { active: false });
+        e.target.classList.remove('image-zoom-mode-active');
+      }
     }
   }
 
   // Handle mouse down to start dragging
   function handleMouseDown(e) {
+    // Check if pan/drag is enabled
+    if (!CONFIG.enablePanDrag) return;
+    
     const target = e.target;
     
     // Only allow dragging on zoomed images
@@ -265,6 +421,12 @@
   
   // Optional: uncomment to enable mouse leave reset
   // document.addEventListener('mouseleave', handleMouseLeave, true);
+
+  // Initialize stylesheet with defaults immediately
+  updateStyleSheet();
+
+  // Load settings on initialization
+  loadSettings();
 
   console.log('Image Zoom extension loaded');
 })();

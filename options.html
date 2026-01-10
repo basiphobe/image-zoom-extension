@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Zoom - Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔍 Image Zoom Settings</h1>
+      <p>Customize how images zoom and behave on web pages</p>
+    </header>
+
+    <form id="settings-form">
+      <!-- Zoom Behavior Section -->
+      <section class="settings-section">
+        <h2>Zoom Behavior</h2>
+        
+        <div class="setting-group">
+          <label for="zoomStep">
+            Zoom Step (per scroll)
+            <span class="value-display" id="zoomStepValue">10%</span>
+          </label>
+          <input type="range" id="zoomStep" min="0.05" max="0.3" step="0.01" value="0.1">
+          <div class="help-text">How much to zoom with each scroll tick</div>
+        </div>
+
+        <div class="setting-group">
+          <label for="minScale">
+            Minimum Zoom Level
+            <span class="value-display" id="minScaleValue">50%</span>
+          </label>
+          <input type="range" id="minScale" min="0.1" max="1.0" step="0.05" value="0.5">
+          <div class="help-text">Smallest size you can zoom out to</div>
+        </div>
+
+        <div class="setting-group">
+          <label for="maxScale">
+            Maximum Zoom Level
+            <span class="value-display" id="maxScaleValue">500%</span>
+          </label>
+          <input type="range" id="maxScale" min="2.0" max="10.0" step="0.5" value="5.0">
+          <div class="help-text">Largest size you can zoom in to</div>
+        </div>
+      </section>
+
+      <!-- Animation Section -->
+      <section class="settings-section">
+        <h2>Animation</h2>
+        
+        <div class="setting-group">
+          <label for="transitionDuration">
+            Transition Speed
+            <span class="value-display" id="transitionDurationValue">100ms</span>
+          </label>
+          <input type="range" id="transitionDuration" min="0" max="500" step="10" value="100">
+          <div class="help-text">Duration of zoom animation (0 = instant)</div>
+        </div>
+      </section>
+
+      <!-- Visual Effects Section -->
+      <section class="settings-section">
+        <h2>Visual Effects</h2>
+        
+        <div class="setting-group checkbox-group">
+          <label>
+            <input type="checkbox" id="enableDropShadow" checked>
+            <span>Drop Shadow</span>
+          </label>
+          <div class="help-text">Add shadow effect to zoomed images</div>
+        </div>
+
+        <div class="setting-group checkbox-group">
+          <label>
+            <input type="checkbox" id="enableContrastBoost" checked>
+            <span>Contrast Boost</span>
+          </label>
+          <div class="help-text">Slightly enhance contrast for better clarity</div>
+        </div>
+
+        <div class="setting-group checkbox-group">
+          <label>
+            <input type="checkbox" id="enableSaturationBoost" checked>
+            <span>Saturation Boost</span>
+          </label>
+          <div class="help-text">Slightly enhance color saturation</div>
+        </div>
+
+        <div class="setting-group checkbox-group">
+          <label>
+            <input type="checkbox" id="enableHoverOutline" checked>
+            <span>Hover Outline</span>
+          </label>
+          <div class="help-text">Show blue outline when hovering over zoomed images</div>
+        </div>
+      </section>
+
+      <!-- Interaction Section -->
+      <section class="settings-section">
+        <h2>Interaction</h2>
+        
+        <div class="setting-group">
+          <label for="activationKey">Activation Key</label>
+          <select id="activationKey">
+            <option value="Control">Ctrl</option>
+            <option value="Alt">Alt</option>
+            <option value="Shift">Shift</option>
+            <option value="Meta">Meta/Command</option>
+          </select>
+          <div class="help-text">Key to hold while scrolling to zoom</div>
+        </div>
+
+        <div class="setting-group checkbox-group">
+          <label>
+            <input type="checkbox" id="enablePanDrag" checked>
+            <span>Pan/Drag</span>
+          </label>
+          <div class="help-text">Click and drag to pan around zoomed images</div>
+        </div>
+
+        <div class="setting-group checkbox-group">
+          <label>
+            <input type="checkbox" id="enableDoubleClickReset" checked>
+            <span>Double-Click to Reset</span>
+          </label>
+          <div class="help-text">Double-click a zoomed image to reset it</div>
+        </div>
+
+        <div class="setting-group checkbox-group">
+          <label>
+            <input type="checkbox" id="enableDoubleClickZoom">
+            <span>Double-Click to Start Zooming</span>
+          </label>
+          <div class="help-text">Double-click an image to begin zooming (double-click again to reset)</div>
+        </div>
+
+        <div class="setting-group checkbox-group">
+          <label>
+            <input type="checkbox" id="enableMarchingAnts" checked>
+            <span>Marching Ants Indicator</span>
+          </label>
+          <div class="help-text">Show animated outline when zoom mode is active on an image</div>
+        </div>
+
+        <div class="setting-group checkbox-group">
+          <label>
+            <input type="checkbox" id="enableBlinkAtOriginal" checked>
+            <span>Blink at Original Size</span>
+          </label>
+          <div class="help-text">Border blinks when image returns to original size</div>
+        </div>
+
+        <div class="setting-group">
+          <label for="marchingAntsColor">Border Color</label>
+          <div class="color-picker-container">
+            <input type="color" id="marchingAntsColor" value="#3b82f6">
+            <input type="text" id="marchingAntsColorText" value="#3b82f6" pattern="^#[0-9A-Fa-f]{6}$" placeholder="#3b82f6">
+          </div>
+          <div class="help-text">Color of the zoom indicator border</div>
+        </div>
+
+        <div class="setting-group">
+          <label for="marchingAntsStyle">Border Style</label>
+          <select id="marchingAntsStyle">
+            <option value="dashed" selected>Dashed</option>
+            <option value="dotted">Dotted</option>
+            <option value="solid">Solid</option>
+          </select>
+          <div class="help-text">Style of the zoom indicator border</div>
+        </div>
+
+        <div class="setting-group">
+          <label for="marchingAntsWidth">
+            Border Width
+            <span class="value-display" id="marchingAntsWidthValue">3px</span>
+          </label>
+          <input type="range" id="marchingAntsWidth" min="1" max="10" step="1" value="3">
+          <div class="help-text">Thickness of the zoom indicator border</div>
+        </div>
+      </section>
+
+      <!-- Action Buttons -->
+      <div class="actions">
+        <button type="submit" class="btn btn-primary">Save Settings</button>
+        <button type="button" id="reset-btn" class="btn btn-secondary">Reset to Defaults</button>
+      </div>
+
+      <div id="status" class="status hidden"></div>
+    </form>
+  </div>
+
+  <script src="defaults.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
